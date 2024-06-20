@@ -1,0 +1,22 @@
+- name: build and run container
+  hosts: server1
+  become: yes
+  become_user: ubuntu
+  
+  - name: remove docker image
+    command: sudo docker rmi react-app
+    ignore_errors: yes
+
+  - name: build image
+    command: sudo docker build -t react-app .
+    args:
+      chdir: /home/ubuntu/react-jenkins-app/react-jenkins-app/
+    
+  - name: tag docker image
+    command: sudo docker tag react-app:latest cghaywat/ghaywatc-repo:react-app-demo
+    ignore_errors: yes
+
+  - name: push docker image on registory
+    command: sudo docker push cghaywat/ghaywatc-repo:react-app-demo
+    ignore_errors: yes
+

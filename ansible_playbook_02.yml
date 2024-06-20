@@ -1,0 +1,21 @@
+- name: build and run container
+  hosts: server2
+  become: yes
+  become_user: ubuntu
+
+  tasks:
+  - name:  running deployment
+    command: sudo kubectl delete deployment react-app
+    ignore_errors: yes
+
+  - name: delete service
+    command: sudo kubectl delete svc react-app
+    ignore_errors: yes
+
+  - name: create deployment 
+    command: sudo kubectl create deployment react-app --image=cghaywat/ghaywatc-repo:react-app-demo
+    ignore_errors: yes
+
+  - name: expose deployment
+    command: sudo kubectl expose deployment react-app --port=80 --type=NodePort
+    ignore_errors: yes 
